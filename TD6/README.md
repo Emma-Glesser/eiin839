@@ -42,11 +42,4 @@ Réponse Json avec BodyStyle = Bare :
 ```12```
 
 Réponse XML avec BodyStyle = Wrapped :
-```<AddXMLResponse xmlns="http://tempuri.org/">
-    <AddXMLResult>12</AddXMLResult>
-</AddXMLResponse>```
-
-
-
-
-
+```<AddXMLResponse xmlns="http://tempuri.org/"> <AddXMLResult>12</AddXMLResult> </AddXMLResponse>```
