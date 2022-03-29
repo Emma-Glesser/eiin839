@@ -1,10 +1,10 @@
-#Compte rendu TD6
+# Compte rendu TD6
 
 
-#SOAP Web Services :
+# SOAP Web Services :
 Dossier MathsLibrary
 
-#REST Web Services : 
+# REST Web Services : 
 
 Dossier MathsLibrary2
 
