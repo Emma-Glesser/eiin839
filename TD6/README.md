@@ -1,14 +1,12 @@
-Compte rendu TD6 
+#Compte rendu TD6
 
 
-SOAP Web Services :
+#SOAP Web Services :
+Dossier MathsLibrary
 
+#REST Web Services : 
 
-
-
-
-
-REST Web Services : 
+Dossier MathsLibrary2
 
 - URL basiques à appeler pour les 4 opérations :
 	- http://localhost:8733/Design_Time_Addresses/MathsLibraryRest/MathsOperations/Add?a=2&b=10
@@ -35,7 +33,7 @@ REST Web Services :
 	- http://localhost:8733/Design_Time_Addresses/MathsLibraryRest/MathsOperations/DivPost
 	
 	Exemple body en Json à remplir pour envoyer la requête :
-		{ 
+		```{ 
 			"a" : 5,
 			"b" : 2
-		}
+		}```
