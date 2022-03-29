@@ -38,13 +38,15 @@ Dossier MathsLibrary2
 Réponse Json avec BodyStyle = Wrapped : 
 ```{ "AddResult": 12 }```
 
+Réponse Json avec BodyStyle = Bare : 
+```12```
+
 Réponse XML avec BodyStyle = Wrapped :
 ```<AddXMLResponse xmlns="http://tempuri.org/">
     <AddXMLResult>12</AddXMLResult>
 </AddXMLResponse>```
 
-Réponse Json avec BodyStyle = Bare : 
-```12```
+
 
 
 
