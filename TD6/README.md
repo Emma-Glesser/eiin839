@@ -33,7 +33,18 @@ Dossier MathsLibrary2
 	- http://localhost:8733/Design_Time_Addresses/MathsLibraryRest/MathsOperations/DivPost
 	
 	Exemple body en Json à remplir pour envoyer la requête :
-		```{ 
-			"a" : 5,
-			"b" : 2
-		}```
+	```{ "a" : 5, "b" : 2 }```
+
+Réponse Json avec BodyStyle = Wrapped : 
+```{ "AddResult": 12 }```
+
+Réponse XML avec BodyStyle = Wrapped :
+```<AddXMLResponse xmlns="http://tempuri.org/">
+    <AddXMLResult>12</AddXMLResult>
+</AddXMLResponse>```
+
+Réponse Json avec BodyStyle = Bare : 
+```12```
+
+
+
