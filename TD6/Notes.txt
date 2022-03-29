@@ -1,0 +1,14 @@
+Introduction :
+Projet : Example
+Chercher la baseAdress dans "Configurer WCF" donne accès à l'utilisation du service SOAP et des méthodes associées/
+
+SOAP Web Services :
+Projets : MathsLibrary & SoapClient
+On génère 4 méthodes et on les appelle dans SoapClient en important ledit service
+On change les propriétés de la solution pour démarrer le service avant le client
+
+REST Web Services:
+Projets : MathsLibrary2
+C/P de MathsLibrary mais en ajoutant WebInvoke + ajout de références dans le projet
+
+
