@@ -1,23 +1,3 @@
-function callRoutingServer(url, requestType, params, finishHandler) {
-    let fullUrl = url;
-
-    // If there are params, we need to add them to the URL.
-    if (params) {
-        // Reminder: an URL looks like protocol://host?param1=value1&param2=value2 ...
-        fullUrl += "?" + params.join("&");
-    }
-    console.log(fullUrl);
-    // The js class used to call external servers is XMLHttpRequest.
-    let caller = new XMLHttpRequest();
-    caller.open(requestType, fullUrl, true);
-    // The header set below limits the elements we are OK to retrieve from the server.
-    caller.setRequestHeader ("Accept", "application/json");
-    // onload shall contain the function that will be called when the call is finished.
-    caller.onload=finishHandler;
-
-    caller.send();
-}
-
 function findPath() {
     let origin = formatAddress(document.getElementById("fromAddress").value);
     let dest = formatAddress(document.getElementById("toAddress").value);
@@ -35,8 +15,8 @@ function findPath() {
 }
 
 function formatAddress(add) {
-    var elements = add.split(' ');
-    var address = elements[0];
+    let elements = add.split(' ');
+    let address = elements[0];
     for(let i=1; i<elements.length; i++) {
         address += "+" + elements[i];
     }
@@ -72,20 +52,46 @@ function removePrevDirections() {
 }
 
 function getTitle(index,len) {
-    if (len==1) {
+    if (len===1) {
         return "Destination too close to take the bike ! Let's walk !"
     }
     else {
-        if(index==0) {
+        if(index===0) {
             return "Walk to the bike station"
         }
-        else if (index==1) {
+        else if (index===1) {
             return "Take a bike and ride to the finish station"
         }
         else {
             return "Leave the bike and walk to your destination !"
         }
     }
+}
+
+function formatDistance(distance) {
+   if (distance >= 1000) {
+       return Math.round(distance/10)/100 + "km";
+   }
+   return Math.round(distance*100)/100 + "m";
+}
+function formatTime(time) {
+    let hours = Math.floor(time / 3600);
+    let minutes = Math.floor((time - (hours * 3600)) / 60);
+    let seconds = time - (hours * 3600) - (minutes * 60);
+
+    if (time>=3600) {
+        return hours + "h" + minutes + "min" ;
+    }
+    if (time >= 60) {
+        return minutes + "min";
+    }
+    return seconds + "s";
+}
+
+function getInfos(result) {
+    let distance = formatDistance(result['distance']);
+    let duration = formatTime(result['duration']);
+    return " - " + distance +  " - " + duration;
 }
 
 function fillDirections(requestResult) {
@@ -99,20 +105,20 @@ function fillDirections(requestResult) {
         let title = document.createElement("H4");
         title.className = "title";
         directionssubdiv.appendChild(title);
-        title.innerHTML = getTitle(i,paths.length);
+        title.innerHTML = getTitle(i,paths.length) + getInfos(paths[i]['features'][0]['properties']['segments'][0]) ;
         let stepsDiv = document.createElement("Div");
         stepsDiv.className = "steps"
         directionssubdiv.appendChild(stepsDiv);
-        let steps = requestResult['GetPathResult'][i]['features'][0]['properties']['segments'][0]['steps'];
+        let steps = paths[i]['features'][0]['properties']['segments'][0]['steps'];
         for(let j=0; j<steps.length; j++) {
             let direction = document.createElement("DIV");
             direction.className = "direction"
             let result = steps[j];
-            direction.innerHTML = result['instruction'] + " during " + result['duration'] + " seconds and " + result['distance'] + "m.";
+            direction.innerHTML = result['instruction'] + " during " + formatTime(result['duration']) + " and " + formatDistance(result['distance'])+ ".";
             stepsDiv.appendChild(direction);
         }
         directionsdiv.appendChild(directionssubdiv);
-        if(paths.length==1) {
+        if(paths.length===1) {
             directionssubdiv.style.height = "100%";
         }
     }
@@ -161,8 +167,7 @@ function createMap() {
 
 function drawLines(path,color) {
     // Create an array containing the GPS positions you want to draw
-    var coords = path;
-    var lineString = new ol.geom.LineString(coords);
+    var lineString = new ol.geom.LineString(path);
 
 // Transform to EPSG:3857
     lineString.transform('EPSG:4326', 'EPSG:3857');

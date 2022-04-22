@@ -35,10 +35,10 @@ h2 {
 
 #research {
     width: 650px;
-    height: 200px;
+    height: 170px;
     background-color: yellowgreen;
     display: flex;
-    flex-flow: column wrap;
+    flex-flow: column nowrap;
     align-content: center;
     justify-content: space-between;
 }
@@ -53,13 +53,14 @@ h2 {
 
 #research button {
     width: auto;
+    height: 30px;
     font-size: 1em;
     margin: 10px 0px;
 }
 
 #path {
     width: 650px;
-    height: 500px;
+    height: 530px;
     background-color: #65c4cf;
     display: flex;
     flex-flow: column wrap;
@@ -76,13 +77,14 @@ h2 {
 
 .title {
     margin: 5px 0px;
+    height: 5%;
 }
 .step {
     height: 31%;
     margin: 5px 0px 5px 10px;
 }
 .steps {
-    height: 80%;
+    height: 90%;
     overflow-y: scroll;
     overflow: auto;
     margin: 5px 0px;
