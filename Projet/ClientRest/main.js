@@ -74,6 +74,7 @@ function formatDistance(distance) {
    }
    return Math.round(distance*100)/100 + "m";
 }
+
 function formatTime(time) {
     let hours = Math.floor(time / 3600);
     let minutes = Math.floor((time - (hours * 3600)) / 60);
@@ -120,6 +121,8 @@ function fillDirections(requestResult) {
         directionsdiv.appendChild(directionssubdiv);
         if(paths.length===1) {
             directionssubdiv.style.height = "100%";
+            title.style.height = "3vh";
+            stepsDiv.style.height = "90%";
         }
     }
 }
