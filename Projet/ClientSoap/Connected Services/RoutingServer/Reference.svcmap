@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ReferenceGroup xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" ID="b6ccb8e5-81a4-4377-9e08-06c4e3ad8e39" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+  <ClientOptions>
+    <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
+    <GenerateTaskBasedAsynchronousMethod>true</GenerateTaskBasedAsynchronousMethod>
+    <EnableDataBinding>true</EnableDataBinding>
+    <ExcludedTypes />
+    <ImportXmlTypes>false</ImportXmlTypes>
+    <GenerateInternalTypes>false</GenerateInternalTypes>
+    <GenerateMessageContracts>false</GenerateMessageContracts>
+    <NamespaceMappings />
+    <CollectionMappings />
+    <GenerateSerializableTypes>true</GenerateSerializableTypes>
+    <Serializer>Auto</Serializer>
+    <UseSerializerForFaults>true</UseSerializerForFaults>
+    <ReferenceAllAssemblies>true</ReferenceAllAssemblies>
+    <ReferencedAssemblies />
+    <ReferencedDataContractTypes />
+    <ServiceContractMappings />
+  </ClientOptions>
+  <MetadataSources>
+    <MetadataSource Address="http://localhost:8733/Design_Time_Addresses/RoutingServer/ServiceSoap/mex" Protocol="mex" SourceId="1" />
+  </MetadataSources>
+  <Metadata>
+    <MetadataFile FileName="service.wsdl" MetadataType="Wsdl" ID="ae037974-f108-4177-96cd-253fc7b932e1" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/RoutingServer/ServiceSoap/mex" />
+    <MetadataFile FileName="service.xsd" MetadataType="Schema" ID="a1062e93-f841-4876-8b12-d51196813c4c" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/RoutingServer/ServiceSoap/mex" />
+    <MetadataFile FileName="service1.xsd" MetadataType="Schema" ID="21a1c32a-314d-4fc7-956c-d25afcb79d55" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/RoutingServer/ServiceSoap/mex" />
+    <MetadataFile FileName="RoutingServer.xsd" MetadataType="Schema" ID="f57b7ca2-d54c-4f73-86ec-72f29c9f134d" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/RoutingServer/ServiceSoap/mex" />
+    <MetadataFile FileName="System.Device.Location.xsd" MetadataType="Schema" ID="3870c63d-b845-4c12-9947-cd4a29e45fea" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/RoutingServer/ServiceSoap/mex" />
+    <MetadataFile FileName="Arrays.xsd" MetadataType="Schema" ID="a84f3ff7-9a6b-4706-9ec5-7829e741e931" SourceId="1" SourceUrl="http://localhost:8733/Design_Time_Addresses/RoutingServer/ServiceSoap/mex" />
+  </Metadata>
+  <Extensions>
+    <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
+    <ExtensionFile FileName="configuration.svcinfo" Name="configuration.svcinfo" />
+  </Extensions>
+</ReferenceGroup>

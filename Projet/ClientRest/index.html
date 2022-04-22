@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Let's go biking</title>
+  <link rel="stylesheet" href="main.css">
+  <link rel="icon" href="./bike.png"/>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/css/ol.css" type="text/css">
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.5.0/build/ol.js"></script>
+</head>
+<body onload="createMap()">
+  <div id="research">
+    <h2>Itinerary</h2>
+    <p>
+      <label for="fromAddress">Start</label>
+      <input name="fromInput" id="fromAddress">
+    </p>
+    <p>
+      <label for="toAddress">Finish</label>
+      <input name="toInput" id="toAddress">
+    </p>
+    <div>
+      <button id="findPath" onclick="findPath();">Find path !</button>
+    </div>
+
+  </div>
+  <div id="path">
+    <h2>Path</h2>
+    <div id="directions">
+
+    </div>
+  </div>
+  <script type="text/javascript" src="main.js"></script>
+  <div id="map">
+    <h2>Map</h2>
+    <div id="osm"></div>
+  </div>
+
+</body>
+</html>

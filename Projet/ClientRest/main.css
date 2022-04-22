@@ -1,0 +1,90 @@
+body {
+    display: flex;
+    height: 720px;
+    flex-flow: column wrap;
+    align-content: space-between;
+}
+#map, #research, #path {
+    margin: 5px 7px;
+    text-align: center;
+    font-family: Candara;
+    font-size:  1.2em;
+    border-radius: 10px;
+}
+
+#map {
+    background-color: darkcyan;
+    color: white;
+    width: 850px;
+    height: 710px;
+}
+
+h2 {
+    margin: 10px 0px;
+    width: 100%;
+}
+
+#osm {
+    width: 100%;
+    height: 92.5%;
+}
+
+#osm > div {
+    border-radius: 0px 0px 10px 10px;
+}
+
+#research {
+    width: 650px;
+    height: 200px;
+    background-color: yellowgreen;
+    display: flex;
+    flex-flow: column wrap;
+    align-content: center;
+    justify-content: space-between;
+}
+
+#research p {
+    margin: 2px 0px;
+}
+#research input {
+    width: 400px;
+    height: 20px;
+}
+
+#research button {
+    width: auto;
+    font-size: 1em;
+    margin: 10px 0px;
+}
+
+#path {
+    width: 650px;
+    height: 500px;
+    background-color: #65c4cf;
+    display: flex;
+    flex-flow: column wrap;
+}
+
+#directions {
+    width: 100%;
+    height: 85%;
+    max-height: 85%;
+    display: flex;
+    flex-flow: column nowrap;
+    text-align: left;
+}
+
+.title {
+    margin: 5px 0px;
+}
+.step {
+    height: 31%;
+    margin: 5px 0px 5px 10px;
+}
+.steps {
+    height: 80%;
+    overflow-y: scroll;
+    overflow: auto;
+    margin: 5px 0px;
+}
+
