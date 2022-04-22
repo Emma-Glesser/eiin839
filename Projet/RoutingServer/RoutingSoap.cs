@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Device.Location;
 using System.Threading.Tasks;
 
@@ -15,22 +16,58 @@ namespace RoutingServer
 
         public Task<List<Station>> GetStationsSoap()
         {
-            return rest.GetStations();
+            try
+            {
+                return rest.GetStations();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+                return null;
+            } 
         }
 
         public Task<Station> GetClosestStationSoap(double lat, double lon)
         {
-            return rest.GetClosestStation(lat, lon);
+            try
+            {
+                return rest.GetClosestStation(lat, lon);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+                return null;
+            }
         }
 
         public Task<GeoCoordinate> GetCoordinateFromAddressSoap(string address)
         {
-            return rest.GetCoordinateFromAddress(address);
+            try
+            {
+                return rest.GetCoordinateFromAddress(address);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+                return null;
+            }
         }
 
         public Task<Path[]> GetPathSoap(string origin, string destination)
         {
-            return rest.GetPath(origin, destination);
+            try
+            {
+                return rest.GetPath(origin, destination);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", e.Message);
+                return null;
+            }
         }
     }
 }

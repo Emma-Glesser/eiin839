@@ -26,7 +26,6 @@ namespace RoutingServer
         public async Task<List<Station>> GetStations()
         {
             string response = await cache.GetStationsAsync();
-            Console.WriteLine(response);
             stations = JsonSerializer.Deserialize<List<Station>>(response);
             closestStationsFrom.AddRange(stations);
             closestStationsTo.AddRange(stations);
@@ -42,7 +41,6 @@ namespace RoutingServer
                 response.EnsureSuccessStatusCode();
                 string responseBody = await response.Content.ReadAsStringAsync();
                 location = JsonSerializer.Deserialize<Location>(responseBody);
-                Console.WriteLine(location);
             }
             catch (HttpRequestException e)
             {
