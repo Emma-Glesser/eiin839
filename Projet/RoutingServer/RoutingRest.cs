@@ -14,25 +14,35 @@ namespace RoutingServer
         static List<Station> stations = new List<Station>();
         static List<Station> closestStationsFrom = new List<Station>();
         static List<Station> closestStationsTo = new List<Station>();
+        static SortedDictionary<double, Station> firstStationsFrom = new SortedDictionary<double, Station>();
+        static SortedDictionary<double, Station> firstStationsTo = new SortedDictionary<double, Station>();
         private const string APIKEYOPENRS = "5b3ce3597851110001cf624822905f9a7b6846959c276a255a3f31c8";
         static ServerProxyClient cache = new ServerProxyClient();
         private static HttpClient client = new HttpClient();
+
+        /* Get if there is an available bike into the station */
         public async Task<bool> GetAvailability(string station, string contract)
         {
+            Console.WriteLine("Get availibility from proxy");
             Station s = JsonSerializer.Deserialize<Station>(await cache.GetAvailabilitiesAsync(station, contract));
             return await checkDisponibility(s);
         }
 
+        /* Retrieve all stations and fill the stations variables */
         public async Task<List<Station>> GetStations()
         {
+            Console.WriteLine("Retrieve all stations");
             string response = await cache.GetStationsAsync();
             stations = JsonSerializer.Deserialize<List<Station>>(response);
             closestStationsFrom.AddRange(stations);
             closestStationsTo.AddRange(stations);
             return stations;
         }
+
+        /* Transform an address into a gps position */
         public async Task<GeoCoordinate> GetCoordinateFromAddress(string address)
         {
+            Console.WriteLine("Find gps position from address");
             Location location = null;
             try
             {
@@ -59,8 +69,10 @@ namespace RoutingServer
             return new GeoCoordinate();
         }
 
+        /* Get the closest station from the gps position */
         public async Task<Station> GetClosestStation(double lat, double lon)
         {
+            Console.WriteLine("Find closest station from gps position");
             GeoCoordinate position = new GeoCoordinate(lat, lon);
             if (stations.Count == 0)
             {
@@ -70,40 +82,90 @@ namespace RoutingServer
             return closestStationsFrom[0];
         }
 
+        /* Get the path from the start to the destination */
         public async Task<Path[]> GetPath(string origin, string destination)
         {
-            GeoCoordinate from = await GetCoordinateFromAddress(origin);
-            GeoCoordinate to = await GetCoordinateFromAddress(destination);
-            await ComputeClosestStation(from, to);
-            Station stationFrom = await getStationFrom();
-            Station stationTo = await getStationToAsync();
-            GeoCoordinate stationFromP = stationFrom.position.getGeoCoordinate();
-            GeoCoordinate stationToP = stationTo.position.getGeoCoordinate();
-            Path[] paths = await GetPaths(from, to, stationFromP, stationToP);
-            if (MustWalk(paths,true))
+            try
             {
-                return new Path[] { paths[3] };
+                Console.WriteLine("Find path");
+                GeoCoordinate from = await GetCoordinateFromAddress(origin);
+                GeoCoordinate to = await GetCoordinateFromAddress(destination);
+                await ComputeClosestStation(from, to);
+                Station stationFrom = await getStationFrom();
+                Station stationTo = await getStationToAsync();
+                GeoCoordinate stationFromP = stationFrom.position.getGeoCoordinate();
+                GeoCoordinate stationToP = stationTo.position.getGeoCoordinate();
+                Path[] paths = await GetPaths(from, to, stationFromP, stationToP);
+                if (MustWalk(paths, true))
+                {
+                    return new Path[] { paths[3] };
+                }
+                else
+                {
+                    return new Path[] { paths[0], paths[1], paths[2] };
+                }
             }
-            else
+            catch (Exception ex)
             {
-                return new Path[] { paths[0] , paths[1] , paths[2] };
-            }        
+                Console.WriteLine("\nException Caught!");
+                Console.WriteLine("Message :{0} ", ex.Message);
+                return null;
+            }
+      
         }
 
+        /* Sort the stations by their distance from start and finish */
         public async Task ComputeClosestStation(GeoCoordinate from, GeoCoordinate to)
         {
+            Console.WriteLine("Sort station by distance from start and finish");
             if (stations.Count == 0)
             {
                 await GetStations();
             }
             closestStationsFrom.Sort(new StationComparer(from));
             closestStationsTo.Sort(new StationComparer(to));
+            firstStationsFrom.Clear();
+            firstStationsTo.Clear();
+            Path path = null;
+            for (int i=0; i<3; i++)
+            {
+                try
+                {
+                    string request = this.GetORSrequest(from, closestStationsTo[i].position.getGeoCoordinate(), false);
+                    HttpResponseMessage response = await client.GetAsync(request);
+                    response.EnsureSuccessStatusCode();
+                    string responseBody = response.Content.ReadAsStringAsync().Result;
+                    path = JsonSerializer.Deserialize<Path>(responseBody);
+                    firstStationsFrom.Add(path.GetDistance(), closestStationsFrom[i]);
+
+                    request = GetORSrequest(closestStationsTo[i].position.getGeoCoordinate(), to, true);
+                    response = await client.GetAsync(request);
+                    response.EnsureSuccessStatusCode();
+                    responseBody = response.Content.ReadAsStringAsync().Result;
+                    path = JsonSerializer.Deserialize<Path>(responseBody);
+                    firstStationsTo.Add(path.GetDistance(), closestStationsTo[i]);
+                }
+                catch (Exception e)
+                {
+                    Console.WriteLine("\nException Caught!");
+                    Console.WriteLine("Message :{0} ", e.Message);
+                }
+            }
         }
 
+        /* Find the closest station from the start with an available bike */
         public async Task<Station> getStationFrom()
         {
+            Console.WriteLine("Find closest station from start");
+            foreach (Station station in firstStationsFrom.Values)
+            {
+                if (await checkDisponibility(station))
+                {
+                    return station;
+                }
+            }
             Station closest = null;
-            int i = 0;
+            int i = 3;
             while (closest == null)
             {
                 if (await checkDisponibility(closestStationsFrom[i]))
@@ -115,13 +177,22 @@ namespace RoutingServer
             return closest;
         }
 
+        /* Find the closest station from the destination with a free place for a bike */
         public async Task<Station> getStationToAsync()
         {
+            Console.WriteLine("Find closest station from destination");
+            foreach (Station station in firstStationsTo.Values)
+            {
+                if (await checkDisponibility(station))
+                {
+                    return station;
+                }
+            }
             Station closest = null;
-            int i = 0;
+            int i = 3;
             while (closest == null)
             {
-                if (await checkPlace(closestStationsFrom[i]))
+                if (await checkPlace(closestStationsTo[i]))
                 {
                     closest = closestStationsTo[i];
                 }
@@ -130,20 +201,25 @@ namespace RoutingServer
             return closest;
         }
 
+        /* Check if there is an available bike in the station */
         public async Task<bool> checkDisponibility(Station station)
         {
+            Console.WriteLine("Check if there is a free bike to take");
             string response = await cache.GetAvailabilitiesAsync(station.number.ToString(), station.contractName);
             station = JsonSerializer.Deserialize<Station>(response);
             return station.totalStands.availabilities.bikes > 0;
         }
 
+        /* Check if there is a free place to leave the bike in the station */
         public async Task<bool> checkPlace(Station station)
         {
+            Console.WriteLine("Check if there is a free place to leave the bike");
             string response = await cache.GetAvailabilitiesAsync(station.number.ToString(), station.contractName);
             station = JsonSerializer.Deserialize<Station>(response);
             return station.totalStands.availabilities.bikes < station.totalStands.capacity;
         }
 
+        /* Create the request to call open route service to get the path from A to B using the bike or not */
         private string GetORSrequest(GeoCoordinate from, GeoCoordinate to,bool bike )
         {
             string start = from.Longitude.ToString(CultureInfo.InvariantCulture) + "," + from.Latitude.ToString(CultureInfo.InvariantCulture);
@@ -162,8 +238,11 @@ namespace RoutingServer
             return request;
         }
 
+        /* Check if it is faster to walk than to walk, take the bike and walk again by checking the different paths.
+         * It compares according to distance or to the time taken*/
         private bool MustWalk(Path[] paths, bool time)
         {
+            Console.WriteLine("Check if the user must walk");
             if (time)
             {
                 double walkDuration = paths[3].GetDuration();
@@ -191,6 +270,8 @@ namespace RoutingServer
 
         }
 
+        /*Find paths from A to BikeStation A, from BikeStationA to BikeStationB, from BikeStationB to B and from A to B 
+         * by using open route service*/
         private async Task<Path[]> GetPaths(GeoCoordinate src, GeoCoordinate dest, GeoCoordinate from, GeoCoordinate to)
         {
             Path path1 = null;
@@ -299,6 +380,7 @@ namespace RoutingServer
         public List<double[]> coordinates { get; set; }
     }
 
+    /*Comparater to sort Station by distance to a gps position */
     public class StationComparer : Comparer<Station>
     {
         private GeoCoordinate reference;

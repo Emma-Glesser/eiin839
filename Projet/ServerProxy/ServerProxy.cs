@@ -20,12 +20,14 @@ namespace ServerProxy
         public string GetAvailabilities(string station, string contract)
         {
             string key = station + " " + contract;
+            Console.WriteLine("Find station : " + key);
             JCDecauxItem item = cache.Get(key, 60);
             return item.content;
         }
         public string GetStations()
         {
             string key = "all";
+            Console.WriteLine("Retrieve all stations");
             JCDecauxItem item = cache.Get(key);
             return item.content;
         }

@@ -34,13 +34,19 @@ function formatRequest(params) {
 function retrievePath() {
     // First of all, check that the call went through OK:
     if (this.status !== 200) {
-        console.log("Contracts not retrieved. Check the error in the Network or Console tab.");
+        console.log("Error find path. Please check Routing server console");
     }
     else {
         let responseObject = JSON.parse(this.responseText);
         console.log(responseObject);
-        fillDirections(responseObject);
-        drawPathOnMap(responseObject);
+        if (responseObject['GetPathResult']===null) {
+            let directions = document.getElementById("directions");
+            directions.innerHTML = "Too many request to open route service, please wait";
+        }
+        else {
+            fillDirections(responseObject);
+            drawPathOnMap(responseObject);
+        }
     }
 }
 
@@ -123,6 +129,11 @@ function fillDirections(requestResult) {
             directionssubdiv.style.height = "100%";
             title.style.height = "3vh";
             stepsDiv.style.height = "90%";
+        }
+        else {
+            if(i<paths.length-1) {
+                directionsdiv.appendChild(document.createElement("hr"));
+            }
         }
     }
 }

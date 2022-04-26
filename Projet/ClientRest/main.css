@@ -85,7 +85,15 @@ h2 {
 }
 .steps {
     height: 78%;
-    overflow-y: scroll;
+    overflow-y: auto;
     margin: 1% 0px;
+}
+
+hr {
+    margin: 0% 0% 0% 2%;
+    border: none;
+    border-top: 2px dashed black;
+    width: 95%;
+
 }
 

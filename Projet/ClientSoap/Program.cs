@@ -12,6 +12,7 @@ namespace ClientSoap
         private static RoutingSoapClient client = new RoutingSoapClient();
         public static void Main(string[] args)
         {
+            Console.WriteLine("Heavy Client ready ! Type help to see commands");
             while(true)
             {
                 Console.Write(">");
@@ -23,6 +24,10 @@ namespace ClientSoap
                 if (command.Equals("cache"))
                 {
                     TimeTakeToGetPath();
+                }
+                if (command.Equals("cities"))
+                {
+                    CompareTwoCities();
                 }
                 if (command.Equals("path"))
                 {
@@ -61,9 +66,10 @@ namespace ClientSoap
                 }
                 if (command.Equals("help"))
                 {
-                    Console.WriteLine("Commands");
+                    Console.WriteLine("-----------Commands-----------");
                     Console.WriteLine("quit");
                     Console.WriteLine("cache");
+                    Console.WriteLine("cities");
                     Console.WriteLine("path");
                     Console.WriteLine("closest");
                     Console.WriteLine("gps");
@@ -85,6 +91,25 @@ namespace ClientSoap
             client.GetPathSoap(start, finish);
             DateTime end2 = DateTime.Now; 
             Console.WriteLine("Second call to rounting server : " + (end2 - init2));
+        }
+
+        private static void CompareTwoCities()
+        {
+            string start1 = "Oslo";
+            string finish1 = "Seville";
+            Console.Write("Time take to get path from " + start1 + " to " + finish1 + " :");
+            DateTime init1 = DateTime.Now;
+            client.GetPathSoap(start1, finish1);
+            DateTime end1 = DateTime.Now;
+            Console.WriteLine(end1 - init1);
+
+            string start2 = "31 Av. Minerve, 13015 Marseille";
+            string finish2 = "Rue de la Largade, 13015 Marseille";
+            Console.Write("Time take to get path from " + start2 + " to " + finish2 + " :");
+            DateTime init2 = DateTime.Now;
+            client.GetPathSoap(start2, finish2);
+            DateTime end2 = DateTime.Now;
+            Console.WriteLine(end2 - init2);
         }
     }
 
